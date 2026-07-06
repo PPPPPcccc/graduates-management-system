@@ -1,3 +1,6 @@
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/GraduatesApplication.java
-/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/controller/TestController.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/controller/GraduateInfoController.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/entity/GraduaInfo.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/mapper/GraduateInfoMapper.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/service/GraduateInfoService.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/service/impl/GraduateInfoServiceImpl.java

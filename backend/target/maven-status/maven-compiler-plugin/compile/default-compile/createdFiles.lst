@@ -1,0 +1,6 @@
+com/kunshan/graduates/service/GraduateInfoService.class
+com/kunshan/graduates/service/impl/GraduateInfoServiceImpl.class
+com/kunshan/graduates/GraduatesApplication.class
+com/kunshan/graduates/entity/GraduaInfo.class
+com/kunshan/graduates/mapper/GraduateInfoMapper.class
+com/kunshan/graduates/controller/GraduateInfoController.class

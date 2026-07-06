@@ -1,3 +1,5 @@
+启动指令：mvn spring-boot:run
+
 # Getting Started
 
 ### Reference Documentation

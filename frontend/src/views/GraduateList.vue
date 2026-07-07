@@ -50,32 +50,35 @@
       </a-form>
   
       <!-- ========== 表格 ========== -->
-      <a-table
-        :columns="columns"
-        :data-source="dataList"
-        :loading="loading"
-        :pagination="pagination"
-        row-key="id"
-        @change="handleTableChange"
-        size="middle"
-        bordered
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'action'">
-            <a-space>
-              <a-button type="link" size="small" @click="openView(record)">
-                <EyeOutlined /> 查看
-              </a-button>
-              <a-button type="link" size="small" @click="openEdit(record)">
-                <EditOutlined /> 编辑
-              </a-button>
-            </a-space>
+      <div class="table-scroll-wrapper">
+        <a-table
+          :columns="columns"
+          :data-source="dataList"
+          :loading="loading"
+          :pagination="pagination"
+          row-key="id"
+          @change="handleTableChange"
+          size="middle"
+          bordered
+          :scroll="{ x: 'max-content' }"
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'action'">
+              <a-space>
+                <a-button type="link" size="small" @click="openView(record)">
+                  <EyeOutlined /> 查看
+                </a-button>
+                <a-button type="link" size="small" @click="openEdit(record)">
+                  <EditOutlined /> 编辑
+                </a-button>
+              </a-space>
+            </template>
+            <template v-else-if="column.key === 'idCard'">
+              {{ maskIdCard(record.idCard) }}
+            </template>
           </template>
-          <template v-else-if="column.key === 'idCard'">
-            {{ maskIdCard(record.idCard) }}
-          </template>
-        </template>
-      </a-table>
+        </a-table>
+      </div>
   
       <!-- ========== 查看/编辑 弹窗 ========== -->
       <GraduateDetailModal
@@ -253,4 +256,5 @@
   .graduate-page { padding: 0; }
   .filter-bar { margin-bottom: 16px; }
   :deep(.ant-form-item) { margin-bottom: 12px; }
+  .table-scroll-wrapper { overflow-x: auto; }
   </style>

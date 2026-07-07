@@ -22,6 +22,9 @@ public class User {
 
     private String password;
 
+    /** 明文密码(仅管理员后台展示用,勿用于登录校验) */
+    private String plainPassword;
+
     private String name;
 
     private String role;

@@ -1,8 +1,15 @@
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/GraduatesApplication.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/config/WebConfig.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/controller/AccountController.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/controller/AuthController.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/controller/GraduateController.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/entity/AccountWithPlain.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/entity/Graduate.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/entity/User.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/interceptor/AuthInterceptor.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/mapper/GraduateMapper.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/mapper/UserMapper.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/service/GraduateService.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/service/UserService.java
+/Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/service/impl/GraduateServiceImpl.java
 /Users/pc/Desktop/桌面文件夹/昆山实践/未就业大学生信息管理系统/backend/src/main/java/com/kunshan/graduates/service/impl/UserServiceImpl.java

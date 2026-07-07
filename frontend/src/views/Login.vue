@@ -82,7 +82,7 @@
         localStorage.setItem('name', res.data.data.name)
         localStorage.setItem('role', res.data.data.role)
         message.success('登录成功')
-        router.push('/home')
+        router.push('/app/graduate')
       } else {
         errorMsg.value = res.data.message
       }

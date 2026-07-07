@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kunshan.graduates.mapper.GraduateMapper">
+
+    <resultMap id="graduateMap" type="com.kunshan.graduates.entity.Graduate">
+        <id property="id" column="id"/>
+        <result property="idCard" column="id_card"/>
+        <result property="name" column="name"/>
+        <result property="education" column="education"/>
+        <result property="school" column="school"/>
+        <result property="graduationDate" column="graduation_date"/>
+        <result property="major" column="major"/>
+        <result property="phone" column="phone"/>
+        <result property="householdAddress" column="household_address"/>
+        <result property="residenceAddress" column="residence_address"/>
+        <result property="investigator" column="investigator"/>
+        <result property="investigationDate" column="investigation_date"/>
+        <result property="investigationMethod" column="investigation_method"/>
+        <result property="employmentStatus" column="employment_status"/>
+        <result property="employmentType" column="employment_type"/>
+        <result property="employmentLocation" column="employment_location"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="unitNature" column="unit_nature"/>
+        <result property="majorMatched" column="major_matched"/>
+        <result property="otherEmployment" column="other_employment"/>
+        <result property="specialEmployment" column="special_employment"/>
+        <result property="otherSituation" column="other_situation"/>
+        <result property="unemployedReason" column="unemployed_reason"/>
+        <result property="employmentWillingness" column="employment_willingness"/>
+        <result property="provide1151Service" column="provide_1151_service"/>
+        <result property="recommendUnitPosition" column="recommend_unit_position"/>
+        <result property="remarks" column="remarks"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <select id="selectGraduatePage" resultMap="graduateMap">
+        SELECT * FROM graduate
+        <where>
+            is_deleted = 0
+            <if test="name != null and name != ''">
+                AND name LIKE '%' || #{name} || '%'
+            </if>
+            <if test="idCard != null and idCard != ''">
+                AND id_card LIKE '%' || #{idCard} || '%'
+            </if>
+            <if test="education != null and education != ''">
+                AND education = #{education}
+            </if>
+            <if test="school != null and school != ''">
+                AND school = #{school}
+            </if>
+            <if test="graduationDate != null and graduationDate != ''">
+                AND graduation_date = #{graduationDate}
+            </if>
+            <if test="major != null and major != ''">
+                AND major LIKE '%' || #{major} || '%'
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone LIKE '%' || #{phone} || '%'
+            </if>
+            <if test="householdAddress != null and householdAddress != ''">
+                AND household_address LIKE '%' || #{householdAddress} || '%'
+            </if>
+            <if test="investigator != null and investigator != ''">
+                AND investigator = #{investigator}
+            </if>
+            <if test="investigationDate != null and investigationDate != ''">
+                AND investigation_date = #{investigationDate}
+            </if>
+            <if test="investigationMethod != null and investigationMethod != ''">
+                AND investigation_method = #{investigationMethod}
+            </if>
+            <if test="employmentStatus != null and employmentStatus != ''">
+                AND employment_status = #{employmentStatus}
+            </if>
+            <if test="employmentType != null and employmentType != ''">
+                AND employment_type = #{employmentType}
+            </if>
+            <if test="otherEmployment != null and otherEmployment != ''">
+                AND other_employment = #{otherEmployment}
+            </if>
+            <if test="specialEmployment != null and specialEmployment != ''">
+                AND special_employment = #{specialEmployment}
+            </if>
+            <if test="otherSituation != null and otherSituation != ''">
+                AND other_situation = #{otherSituation}
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
+</mapper>

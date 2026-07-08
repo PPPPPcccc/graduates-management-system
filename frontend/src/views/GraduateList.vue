@@ -84,7 +84,7 @@
               </a-space>
             </template>
             <template v-else-if="column.key === 'idCard'">
-              {{ maskIdCard(record.idCard) }}
+              {{ record.idCard }}
             </template>
           </template>
         </a-table>
@@ -265,11 +265,6 @@
     pagination.current = pag.current
     pagination.pageSize = pag.pageSize
     loadData()
-  }
-
-  const maskIdCard = (s) => {
-    if (!s || s.length < 18) return s
-    return s.slice(0, 6) + '*'.repeat(8) + s.slice(14)
   }
 
   const handleDelete = (record) => {

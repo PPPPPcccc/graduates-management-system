@@ -3,124 +3,170 @@
     <a-modal
       :open="open"
       :title="mode === 'add' ? '添加毕业生信息' : mode === 'edit' ? '编辑毕业生信息' : '查看毕业生信息'"
-      width="800px"
+      width="900px"
       :footer="null"
       :mask-closable="false"
       @cancel="handleClose"
       :destroy-on-close="true"
     >
-      <a-form
-        :model="form"
-        :label-col="{ span: 6 }"
-        :wrapper-col="{ span: 16 }"
-        :disabled="mode === 'view'"
-        layout="horizontal"
-      >
-        <a-row :gutter="16">
-          <a-col :span="12"><a-form-item label="姓名" name="name">
-            <a-input v-model:value="form.name" placeholder="请输入姓名" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="身份证号" name="idCard">
-            <a-input v-model:value="form.idCard" placeholder="请输入身份证号" />
-          </a-form-item></a-col>
+      <a-form :model="form" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :disabled="mode === 'view'" layout="horizontal">
 
-          <a-col :span="12"><a-form-item label="学历" name="education">
-            <a-select v-model:value="form.education" :options="EDU" placeholder="请选择学历" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="毕业院校" name="school">
-            <a-input v-model:value="form.school" placeholder="请输入毕业院校" />
-          </a-form-item></a-col>
+        <!-- ========== 区域一：个人信息 ========== -->
+        <div class="section-block">
+          <div class="section-title">个人信息</div>
+          <a-row :gutter="16">
+            <a-col :span="12"><a-form-item label="姓名" name="name">
+              <a-input v-model:value="form.name" placeholder="请输入姓名" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="身份证号" name="idCard">
+              <a-input v-model:value="form.idCard" placeholder="请输入身份证号" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="学历" name="education">
+              <a-select v-model:value="form.education" :options="EDU" placeholder="请选择学历" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="毕业院校" name="school">
+              <a-input v-model:value="form.school" placeholder="请输入毕业院校" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="毕业日期" name="graduationDate">
+              <a-input v-model:value="form.graduationDate" placeholder="如:2026年6月" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="专业" name="major">
+              <a-input v-model:value="form.major" placeholder="请输入专业" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="联系电话" name="phone">
+              <a-input v-model:value="form.phone" placeholder="请输入联系电话" />
+            </a-form-item></a-col>
+            <a-col :span="24"><a-form-item label="户籍地址" name="householdAddress">
+              <a-input v-model:value="form.householdAddress" />
+            </a-form-item></a-col>
+            <a-col :span="24"><a-form-item label="常住详细地址" name="residenceAddress">
+              <a-input v-model:value="form.residenceAddress" />
+            </a-form-item></a-col>
+          </a-row>
+        </div>
 
-          <a-col :span="12"><a-form-item label="毕业日期" name="graduationDate">
-            <a-input v-model:value="form.graduationDate" placeholder="如:2026年6月" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="专业" name="major">
-            <a-input v-model:value="form.major" placeholder="请输入专业" />
-          </a-form-item></a-col>
+        <!-- ========== 区域二：调查记录 ========== -->
+        <div class="section-block">
+          <div class="section-title">调查记录</div>
+          <a-row :gutter="16">
+            <a-col :span="12"><a-form-item label="调查人" name="investigator">
+              <a-input v-model:value="form.investigator" placeholder="请输入调查人" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="调查日期" name="investigationDate">
+              <a-input v-model:value="form.investigationDate" placeholder="如:4月16日" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="调查方式" name="investigationMethod">
+              <a-select v-model:value="form.investigationMethod" :options="METHOD" placeholder="请选择" />
+            </a-form-item></a-col>
+            <a-col :span="12"><a-form-item label="服务时间" name="serviceTime">
+              <a-input v-model:value="form.serviceTime" />
+            </a-form-item></a-col>
+          </a-row>
+        </div>
 
-          <a-col :span="12"><a-form-item label="联系电话" name="phone">
-            <a-input v-model:value="form.phone" placeholder="请输入联系电话" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="调查人" name="investigator">
-            <a-input v-model:value="form.investigator" placeholder="请输入调查人" />
-          </a-form-item></a-col>
+        <!-- ========== 区域三：就业情况 ========== -->
+        <div class="section-block">
+          <div class="section-title">就业情况</div>
 
-          <a-col :span="24"><a-form-item label="户籍地址" name="householdAddress">
-            <a-input v-model:value="form.householdAddress" />
-          </a-form-item></a-col>
-          <a-col :span="24"><a-form-item label="常住详细地址" name="residenceAddress">
-            <a-input v-model:value="form.residenceAddress" />
-          </a-form-item></a-col>
+          <!-- 一级：就业状态 -->
+          <a-row :gutter="16" style="margin-bottom: 16px;">
+            <a-col :span="8"><a-form-item label="就业情况" name="employmentStatus">
+              <a-select v-model:value="form.employmentStatus" :options="EMP_STATUS"
+                placeholder="请选择" @change="onStatusChange" />
+            </a-form-item></a-col>
+            <a-col :span="8"><a-form-item label="就业类型" name="employmentType">
+              <a-select v-model:value="form.employmentType" :options="empTypeOptions"
+                placeholder="请先选择就业情况" :disabled="!form.employmentStatus || form.employmentStatus === '未就业'"
+                @change="onTypeChange" />
+            </a-form-item></a-col>
+            <a-col :span="8"><a-form-item label="细分">
+              <a-select v-model:value="thirdLevel.value" :options="thirdLevel.options"
+                placeholder="请先选择就业类型" :disabled="!form.employmentType || !['其他就业','特殊就业','其他情况'].includes(form.employmentType)" />
+            </a-form-item></a-col>
+          </a-row>
 
-          <a-col :span="12"><a-form-item label="调查日期" name="investigationDate">
-            <a-input v-model:value="form.investigationDate" placeholder="如:4月16日" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="调查方式" name="investigationMethod">
-            <a-select v-model:value="form.investigationMethod" :options="METHOD" placeholder="请选择" />
-          </a-form-item></a-col>
+          <!-- 已就业-单位就业 -->
+          <div v-if="form.employmentStatus === '已就业' && form.employmentType === '单位就业'">
+            <a-row :gutter="16">
+              <a-col :span="12"><a-form-item label="就业地" name="employmentLocation">
+                <a-input v-model:value="form.employmentLocation" />
+              </a-form-item></a-col>
+              <a-col :span="12"><a-form-item label="单位名称" name="unitName">
+                <a-input v-model:value="form.unitName" />
+              </a-form-item></a-col>
+              <a-col :span="12"><a-form-item label="单位性质" name="unitNature">
+                <a-select v-model:value="form.unitNature" :options="UNIT_NATURE" placeholder="请选择" />
+              </a-form-item></a-col>
+              <a-col :span="12"><a-form-item label="专业是否对口" name="majorMatched">
+                <a-select v-model:value="form.majorMatched" :options="YES_NO" placeholder="请选择" />
+              </a-form-item></a-col>
+            </a-row>
+          </div>
 
-          <a-col :span="12"><a-form-item label="就业地" name="employmentLocation">
-            <a-input v-model:value="form.employmentLocation" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="单位名称" name="unitName">
-            <a-input v-model:value="form.unitName" />
-          </a-form-item></a-col>
+          <!-- 已就业-其他就业 -->
+          <div v-if="form.employmentStatus === '已就业' && form.employmentType === '其他就业'">
+            <a-row :gutter="16">
+              <a-col :span="24"><a-form-item label="其他就业">
+                <a-input v-model:value="thirdLevel.value" placeholder="请输入其他就业情况" />
+              </a-form-item></a-col>
+            </a-row>
+          </div>
 
-          <a-col :span="12"><a-form-item label="单位性质" name="unitNature">
-            <a-select v-model:value="form.unitNature" :options="UNIT_NATURE" placeholder="请选择" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="专业是否对口" name="majorMatched">
-            <a-select v-model:value="form.majorMatched" :options="YES_NO" placeholder="请选择" />
-          </a-form-item></a-col>
+          <!-- 已就业-特殊就业 -->
+          <div v-if="form.employmentStatus === '已就业' && form.employmentType === '特殊就业'">
+            <a-row :gutter="16">
+              <a-col :span="24"><a-form-item label="特殊就业">
+                <a-input v-model:value="thirdLevel.value" placeholder="请输入特殊就业情况" />
+              </a-form-item></a-col>
+            </a-row>
+          </div>
 
-          <a-col :span="24"><a-form-item label="未就业原因" name="unemployedReason">
-            <a-select v-model:value="form.unemployedReason" :options="UNEMPLOYED_REASON" placeholder="请选择" allow-clear />
-          </a-form-item></a-col>
+          <!-- 已就业-其他情况 -->
+          <div v-if="form.employmentStatus === '已就业' && form.employmentType === '其他情况'">
+            <a-row :gutter="16">
+              <a-col :span="24"><a-form-item label="其他情况">
+                <a-input v-model:value="thirdLevel.value" placeholder="请输入其他情况" />
+              </a-form-item></a-col>
+            </a-row>
+          </div>
 
-          <a-col :span="12"><a-form-item label="有无就业意愿" name="employmentWillingness">
-            <a-select v-model:value="form.employmentWillingness" :options="YES_NO" placeholder="请选择" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label='是否提供"1151"服务' name="provide1151Service">
-            <a-select v-model:value="form.provide1151Service" :options="YES_NO" placeholder="请选择" />
-          </a-form-item></a-col>
+          <!-- 未就业 -->
+          <div v-if="form.employmentStatus === '未就业'">
+            <a-row :gutter="16">
+              <a-col :span="12"><a-form-item label="未就业原因" name="unemployedReason">
+                <a-select v-model:value="form.unemployedReason" :options="UNEMPLOYED_REASON" placeholder="请选择" allow-clear />
+              </a-form-item></a-col>
+              <a-col :span="12"><a-form-item label="有无就业意愿" name="employmentWillingness">
+                <a-select v-model:value="form.employmentWillingness" :options="YES_NO" placeholder="请选择" />
+              </a-form-item></a-col>
+              <a-col :span="12"><a-form-item label='是否提供"1151"服务' name="provide1151Service">
+                <a-select v-model:value="form.provide1151Service" :options="YES_NO" placeholder="请选择" />
+              </a-form-item></a-col>
+              <a-col :span="24"><a-form-item label="就业服务需求">
+                <a-select v-model:value="form.employmentServiceNeeds" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
+              </a-form-item></a-col>
+              <a-col :span="24"><a-form-item label="已接受就业服务">
+                <a-select v-model:value="form.receivedServices" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
+              </a-form-item></a-col>
+              <a-col :span="24"><a-form-item label="推荐单位及岗位" name="recommendUnitPosition">
+                <a-input v-model:value="form.recommendUnitPosition" />
+              </a-form-item></a-col>
+            </a-row>
+          </div>
+        </div>
 
-          <a-col :span="24"><a-form-item label="就业服务需求" name="employmentServiceNeeds">
-            <a-select v-model:value="form.employmentServiceNeeds" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
-          </a-form-item></a-col>
+        <!-- ========== 区域四：备注 ========== -->
+        <div class="section-block">
+          <div class="section-title">备注</div>
+          <a-row :gutter="16">
+            <a-col :span="24"><a-form-item :wrapper-col="{ span: 24 }">
+              <a-textarea v-model:value="form.remarks" :rows="3" placeholder="请输入备注" />
+            </a-form-item></a-col>
+          </a-row>
+        </div>
 
-          <a-col :span="12"><a-form-item label="服务时间" name="serviceTime">
-            <a-input v-model:value="form.serviceTime" />
-          </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="已接受就业服务" name="receivedServices">
-            <a-select v-model:value="form.receivedServices" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
-          </a-form-item></a-col>
-
-          <a-col :span="24"><a-form-item label="推荐单位及岗位" name="recommendUnitPosition">
-            <a-input v-model:value="form.recommendUnitPosition" />
-          </a-form-item></a-col>
-
-          <!-- ========== 三联就业下拉 ========== -->
-          <a-col :span="8"><a-form-item label="就业情况(一级)" name="employmentStatus">
-            <a-select v-model:value="form.employmentStatus" :options="EMP_STATUS"
-              placeholder="请选择" @change="onStatusChange" />
-          </a-form-item></a-col>
-          <a-col :span="8"><a-form-item label="就业情况(二级)" name="employmentType">
-            <a-select v-model:value="form.employmentType" :options="empTypeOptions"
-              placeholder="请先选择一级" :disabled="!form.employmentStatus || form.employmentStatus !== '已就业'"
-              @change="onTypeChange" />
-          </a-form-item></a-col>
-          <a-col :span="8"><a-form-item label="就业情况(三级)">
-            <a-select v-model:value="thirdLevel.value" :options="thirdLevel.options"
-              placeholder="请先选择二级" :disabled="!thirdLevel.enabled" />
-          </a-form-item></a-col>
-
-          <a-col :span="24"><a-form-item label="备注" name="remarks">
-            <a-textarea v-model:value="form.remarks" :rows="2" />
-          </a-form-item></a-col>
-        </a-row>
-
-        <!-- 添加/编辑模式才有保存按钮 -->
-        <div v-if="mode === 'add' || mode === 'edit'" style="text-align: right; margin-top: 16px;">
+        <!-- 保存按钮 -->
+        <div v-if="mode === 'add' || mode === 'edit'" style="text-align: right; margin-top: 8px;">
           <a-space>
             <a-button @click="handleClose">取消</a-button>
             <a-button type="primary" :loading="saving" @click="handleSave">保存</a-button>
@@ -244,17 +290,19 @@
   watch(() => props.open, (v) => {
     if (v) {
       Object.assign(form, JSON.parse(JSON.stringify(props.record || {})))
-      if (form.employmentStatus) onStatusChange(form.employmentStatus)
-      if (form.employmentType) {
-        const map = {
-          '其他就业': 'otherEmployment',
-          '特殊就业': 'specialEmployment',
-          '其他情况': 'otherSituation'
-        }
-        const field = map[form.employmentType]
-        if (field && form[field]) {
-          onTypeChange(form.employmentType)
-          thirdLevel.value = form[field]
+      if (form.employmentStatus === '已就业') {
+        empTypeOptions.value = EMP_TYPE
+        if (form.employmentType) {
+          const map = {
+            '其他就业': 'otherEmployment',
+            '特殊就业': 'specialEmployment',
+            '其他情况': 'otherSituation'
+          }
+          const field = map[form.employmentType]
+          if (field && form[field]) {
+            onTypeChange(form.employmentType)
+            thirdLevel.value = form[field]
+          }
         }
       }
     } else {
@@ -292,3 +340,22 @@
     }
   }
   </script>
+
+  <style scoped>
+  .section-block {
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+    padding: 16px 16px 8px;
+    margin-bottom: 16px;
+    background: #fafafa;
+  }
+  .section-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1890ff;
+    display: inline-block;
+  }
+  </style>

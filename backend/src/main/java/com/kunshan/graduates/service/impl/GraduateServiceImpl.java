@@ -4,6 +4,7 @@ package com.kunshan.graduates.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kunshan.graduates.entity.Graduate;
+import com.kunshan.graduates.mapper.GraduateAuxMapper;
 import com.kunshan.graduates.mapper.GraduateMapper;
 import com.kunshan.graduates.service.GraduateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.*;
 public class GraduateServiceImpl implements GraduateService {
 
     @Autowired private GraduateMapper graduateMapper;
+    @Autowired private GraduateAuxMapper graduateAuxMapper;
 
     @Override
     public Map<String, Object> pageQuery(Map<String, Object> p) {
@@ -127,6 +129,11 @@ public class GraduateServiceImpl implements GraduateService {
                 Graduate g = mapToGraduate(row);
                 g.setCreatedBy(createdBy);
                 graduateMapper.insertGraduate(g);
+                Integer gradId = g.getId();
+
+                // 同步写入关联表
+                syncAuxTables(gradId, row);
+
                 successCount++;
             } catch (Exception e) {
                 Map<String, String> err = new HashMap<>();
@@ -141,6 +148,45 @@ public class GraduateServiceImpl implements GraduateService {
         out.put("failedCount", failed.size());
         out.put("failed", failed);
         return out;
+    }
+
+    /**
+     * 将就业服务需求、已接受就业服务、服务时间写入关联表
+     * 注意：key 必须与前端 HEADERS 数组中的列名保持一致
+     */
+    private void syncAuxTables(Integer graduateId, Map<String, String> row) {
+        // 就业服务需求（可多选，逗号分隔）
+        String demandStr = row.get("就业服务需求(可多选)");
+        if (demandStr != null && !demandStr.trim().isEmpty()) {
+            for (String d : demandStr.split(",")) {
+                d = d.trim();
+                if (!d.isEmpty()) {
+                    graduateAuxMapper.insertServiceDemand(graduateId, d);
+                }
+            }
+        }
+
+        // 已接受就业服务（可多选，逗号分隔）
+        String receivedStr = row.get("已接受就业服务(可多选)");
+        if (receivedStr != null && !receivedStr.trim().isEmpty()) {
+            for (String s : receivedStr.split(",")) {
+                s = s.trim();
+                if (!s.isEmpty()) {
+                    graduateAuxMapper.insertAcceptedService(graduateId, s);
+                }
+            }
+        }
+
+        // 服务时间（可多选，逗号分隔）
+        String timeStr = row.get("服务时间");
+        if (timeStr != null && !timeStr.trim().isEmpty()) {
+            for (String t : timeStr.split(",")) {
+                t = t.trim();
+                if (!t.isEmpty()) {
+                    graduateAuxMapper.insertServiceTime(graduateId, t);
+                }
+            }
+        }
     }
 
     private Graduate mapToGraduate(Map<String, String> row) {

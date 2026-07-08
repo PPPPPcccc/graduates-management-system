@@ -3,8 +3,10 @@ package com.kunshan.graduates.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kunshan.graduates.entity.AuxItem;
 import com.kunshan.graduates.entity.Graduate;
 import com.kunshan.graduates.mapper.GraduateAuxMapper;
+import com.kunshan.graduates.mapper.GraduateFullMapper;
 import com.kunshan.graduates.mapper.GraduateMapper;
 import com.kunshan.graduates.service.GraduateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.text.Collator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GraduateServiceImpl implements GraduateService {
 
     @Autowired private GraduateMapper graduateMapper;
     @Autowired private GraduateAuxMapper graduateAuxMapper;
+    @Autowired private GraduateFullMapper graduateFullMapper;
 
     @Override
     public Map<String, Object> pageQuery(Map<String, Object> p) {
@@ -34,6 +38,9 @@ public class GraduateServiceImpl implements GraduateService {
                 str(p.get("employmentStatus")), str(p.get("employmentType")),
                 str(p.get("otherEmployment")), str(p.get("specialEmployment")),
                 str(p.get("otherSituation")));
+
+        // 补全关联表数据
+        fillAuxData(result.getRecords());
 
         Map<String, Object> out = new HashMap<>();
         out.put("records", result.getRecords());
@@ -57,21 +64,60 @@ public class GraduateServiceImpl implements GraduateService {
 
     @Override
     public Graduate getById(Long id) {
-        return graduateMapper.selectById(id);
-    }
-
-    @Override
-    public boolean update(Long id, Graduate g, String updatedBy) {
-        g.setId(id.intValue());
-        deriveEmploymentFields(g);
-        return graduateMapper.updateById(g) >= 0;
+        return graduateFullMapper.selectByIdWithAux(id.intValue());
     }
 
     @Override
     public boolean add(Graduate g, String createdBy) {
         g.setCreatedBy(createdBy);
         deriveEmploymentFields(g);
-        return graduateMapper.insertGraduate(g) > 0;
+        boolean ok = graduateMapper.insertGraduate(g) > 0;
+        if (ok) {
+            syncAuxFromEntity(g.getId(), g);
+        }
+        return ok;
+    }
+
+    @Override
+    public boolean update(Long id, Graduate g, String updatedBy) {
+        g.setId(id.intValue());
+        deriveEmploymentFields(g);
+        boolean ok = graduateMapper.updateById(g) >= 0;
+        if (ok) {
+            // 先删后插，保持关联数据同步
+            graduateAuxMapper.deleteServiceDemands(id.intValue());
+            graduateAuxMapper.deleteAcceptedServices(id.intValue());
+            graduateAuxMapper.deleteServiceTimes(id.intValue());
+            syncAuxFromEntity(id.intValue(), g);
+        }
+        return ok;
+    }
+
+    /**
+     * 从 Graduate 实体（含 List 字段）写入关联表
+     */
+    private void syncAuxFromEntity(Integer graduateId, Graduate g) {
+        if (g.getEmploymentServiceNeeds() != null) {
+            for (String d : g.getEmploymentServiceNeeds()) {
+                if (d != null && !d.trim().isEmpty()) {
+                    graduateAuxMapper.insertServiceDemand(graduateId, d.trim());
+                }
+            }
+        }
+        if (g.getReceivedServices() != null) {
+            for (String s : g.getReceivedServices()) {
+                if (s != null && !s.trim().isEmpty()) {
+                    graduateAuxMapper.insertAcceptedService(graduateId, s.trim());
+                }
+            }
+        }
+        if (g.getServiceTime() != null) {
+            for (String t : g.getServiceTime()) {
+                if (t != null && !t.trim().isEmpty()) {
+                    graduateAuxMapper.insertServiceTime(graduateId, t.trim());
+                }
+            }
+        }
     }
 
     /**
@@ -240,5 +286,34 @@ public class GraduateServiceImpl implements GraduateService {
     @Override
     public boolean delete(Long id) {
         return graduateMapper.deleteById(id) > 0;
+    }
+
+    /**
+     * 批量填充关联表数据到 graduate 列表
+     */
+    private void fillAuxData(List<Graduate> records) {
+        if (records == null || records.isEmpty()) return;
+
+        List<Integer> ids = records.stream().map(Graduate::getId).collect(Collectors.toList());
+        String idsStr = ids.stream().map(String::valueOf).collect(Collectors.joining(","));
+
+        Map<Integer, List<String>> demandsMap  = auxToMap(graduateFullMapper.selectDemandsByGraduateIds(idsStr));
+        Map<Integer, List<String>> servicesMap = auxToMap(graduateFullMapper.selectServicesByGraduateIds(idsStr));
+        Map<Integer, List<String>> timesMap    = auxToMap(graduateFullMapper.selectServiceTimesByGraduateIds(idsStr));
+
+        for (Graduate g : records) {
+            g.setEmploymentServiceNeeds(demandsMap.get(g.getId()));
+            g.setReceivedServices(servicesMap.get(g.getId()));
+            g.setServiceTime(timesMap.get(g.getId()));
+        }
+    }
+
+    private Map<Integer, List<String>> auxToMap(List<AuxItem> items) {
+        Map<Integer, List<String>> map = new HashMap<>();
+        if (items == null) return map;
+        for (AuxItem item : items) {
+            map.computeIfAbsent(item.getGraduateId(), k -> new ArrayList<>()).add(item.getValue());
+        }
+        return map;
     }
 }

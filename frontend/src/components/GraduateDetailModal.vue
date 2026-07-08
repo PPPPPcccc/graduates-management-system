@@ -95,7 +95,7 @@
                 <a-input v-model:value="form.unitName" />
               </a-form-item></a-col>
               <a-col :span="12"><a-form-item label="单位性质" name="unitNature">
-                <a-select v-model:value="form.unitNature" :options="UNIT_NATURE" placeholder="请选择" />
+                <a-input v-model:value="form.unitNature" placeholder="请输入单位性质" />
               </a-form-item></a-col>
               <a-col :span="12"><a-form-item label="专业是否对口" name="majorMatched">
                 <a-select v-model:value="form.majorMatched" :options="YES_NO" placeholder="请选择" />
@@ -134,7 +134,7 @@
           <div v-if="form.employmentStatus === '未就业'">
             <a-row :gutter="16">
               <a-col :span="12"><a-form-item label="未就业原因" name="unemployedReason">
-                <a-select v-model:value="form.unemployedReason" :options="UNEMPLOYED_REASON" placeholder="请选择" allow-clear />
+                <a-input v-model:value="form.unemployedReason" placeholder="请输入未就业原因" />
               </a-form-item></a-col>
               <a-col :span="12"><a-form-item label="有无就业意愿" name="employmentWillingness">
                 <a-select v-model:value="form.employmentWillingness" :options="YES_NO" placeholder="请选择" />
@@ -143,10 +143,10 @@
                 <a-select v-model:value="form.provide1151Service" :options="YES_NO" placeholder="请选择" />
               </a-form-item></a-col>
               <a-col :span="24"><a-form-item label="就业服务需求">
-                <a-select v-model:value="form.employmentServiceNeeds" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
+                <a-select v-model:value="form.employmentServiceNeeds" :options="SERVICE_DEMANDS" mode="multiple" placeholder="可多选" allow-clear />
               </a-form-item></a-col>
               <a-col :span="24"><a-form-item label="已接受就业服务">
-                <a-select v-model:value="form.receivedServices" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
+                <a-select v-model:value="form.receivedServices" :options="RECEIVED_SERVICES" mode="multiple" placeholder="可多选" allow-clear />
               </a-form-item></a-col>
               <a-col :span="24"><a-form-item label="推荐单位及岗位" name="recommendUnitPosition">
                 <a-input v-model:value="form.recommendUnitPosition" />
@@ -212,35 +212,33 @@
     { value: '特殊就业', label: '特殊就业' },
     { value: '其他情况', label: '其他情况' }
   ]
-  const UNIT_NATURE = [
-    { value: '机关', label: '机关' },
-    { value: '事业单位', label: '事业单位' },
-    { value: '国有企业', label: '国有企业' },
-    { value: '民营企业', label: '民营企业' },
-    { value: '三资企业', label: '三资企业' },
-    { value: '其他', label: '其他' }
-  ]
+
   const YES_NO = [
     { value: '是', label: '是' },
     { value: '否', label: '否' }
   ]
-  const UNEMPLOYED_REASON = [
-    { value: '正在择业中', label: '正在择业中' },
-    { value: '暂无合适岗位', label: '暂无合适岗位' },
-    { value: '薪酬期望过高', label: '薪酬期望过高' },
-    { value: '技能不足', label: '技能不足' },
-    { value: '家庭原因', label: '家庭原因' },
-    { value: '准备升学/考公', label: '准备升学/考公' },
-    { value: '身体原因', label: '身体原因' },
-    { value: '其他', label: '其他' }
+
+  const SERVICE_DEMANDS = [
+    { value: '失业登记需求',     label: '失业登记需求' },
+    { value: '困难认定需求',     label: '困难认定需求' },
+    { value: '职业指导需求',     label: '职业指导需求' },
+    { value: '求职需求',         label: '求职需求' },
+    { value: '技能培训需求',     label: '技能培训需求' },
+    { value: '创业服务需求',     label: '创业服务需求' },
+    { value: '就业见习需求',     label: '就业见习需求' },
+    { value: '其他需求',         label: '其他需求' }
   ]
-  const SERVICE_NEEDS = [
-    { value: '职业指导', label: '职业指导' },
-    { value: '岗位推荐', label: '岗位推荐' },
-    { value: '技能培训', label: '技能培训' },
-    { value: '政策咨询', label: '政策咨询' },
-    { value: '创业扶持', label: '创业扶持' },
-    { value: '心理辅导', label: '心理辅导' }
+  const RECEIVED_SERVICES = [
+    { value: '失业登记',         label: '失业登记' },
+    { value: '重点帮扶',         label: '重点帮扶' },
+    { value: '求职登记',         label: '求职登记' },
+    { value: '职业指导',         label: '职业指导' },
+    { value: '创业培训',         label: '创业培训' },
+    { value: '就业见习',         label: '就业见习' },
+    { value: '就业援助',         label: '就业援助' },
+    { value: '岗位推荐',         label: '岗位推荐' },
+    { value: '技能培训',         label: '技能培训' },
+    { value: '创业指导服务',      label: '创业指导服务' }
   ]
 
   const empTypeOptions = ref([])

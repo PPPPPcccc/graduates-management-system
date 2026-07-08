@@ -42,6 +42,7 @@ public class Graduate {
     private String otherSituation;
     private String unemployedReason;
     private String employmentWillingness;
+    @TableField("provide_1151_service")
     private String provide1151Service;
     private String recommendUnitPosition;
     private String remarks;

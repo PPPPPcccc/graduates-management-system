@@ -9,3 +9,9 @@ export function updateGraduate(id, data) {
 export function fetchFilterOptions() {
   return request.get('/graduate/filter-options')
 }
+export function addGraduate(data) {
+  return request.post('/graduate', data)
+}
+export function batchAddGraduates(rows) {
+  return request.post('/graduate/batch', rows)
+}

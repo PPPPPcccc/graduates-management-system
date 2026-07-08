@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -62,6 +63,27 @@ public class GraduateController {
         boolean ok = graduateService.update(id, g, updatedBy);
         out.put("success", ok);
         out.put("message", ok ? "保存成功" : "保存失败");
+        return out;
+    }
+
+    @PostMapping
+    public Map<String, Object> add(@RequestBody Graduate g, HttpSession session) {
+        Map<String, Object> out = new HashMap<>();
+        String createdBy = (String) session.getAttribute("username");
+        boolean ok = graduateService.add(g, createdBy);
+        out.put("success", ok);
+        out.put("message", ok ? "添加成功" : "添加失败");
+        return out;
+    }
+
+    @PostMapping("/batch")
+    public Map<String, Object> batchAdd(@RequestBody List<Map<String, String>> rows,
+                                         HttpSession session) {
+        Map<String, Object> out = new HashMap<>();
+        String createdBy = (String) session.getAttribute("username");
+        Map<String, Object> result = graduateService.batchAdd(rows, createdBy);
+        out.put("success", true);
+        out.put("data", result);
         return out;
     }
 }

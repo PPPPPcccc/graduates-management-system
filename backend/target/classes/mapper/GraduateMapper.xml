@@ -38,6 +38,25 @@
         <result property="updatedBy" column="updated_by"/>
     </resultMap>
 
+    <insert id="insertGraduate" parameterType="com.kunshan.graduates.entity.Graduate"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO graduate (
+            id_card, name, education, school, graduation_date, major, phone,
+            household_address, residence_address, investigator, investigation_date,
+            investigation_method, employment_status, employment_type, employment_location,
+            unit_name, unit_nature, major_matched, other_employment, special_employment,
+            other_situation, unemployed_reason, employment_willingness, provide_1151_service,
+            recommend_unit_position, remarks, is_deleted, created_at, created_by
+        ) VALUES (
+            #{idCard}, #{name}, #{education}, #{school}, #{graduationDate}, #{major}, #{phone},
+            #{householdAddress}, #{residenceAddress}, #{investigator}, #{investigationDate},
+            #{investigationMethod}, #{employmentStatus}, #{employmentType}, #{employmentLocation},
+            #{unitName}, #{unitNature}, #{majorMatched}, #{otherEmployment}, #{specialEmployment},
+            #{otherSituation}, #{unemployedReason}, #{employmentWillingness}, #{provide1151Service},
+            #{recommendUnitPosition}, #{remarks}, 0, datetime('now'), #{createdBy}
+        )
+    </insert>
+
     <select id="selectGraduatePage" resultMap="graduateMap">
         SELECT * FROM graduate
         <where>

@@ -45,6 +45,13 @@
             <a-button @click="openAdvanced">
               <FilterOutlined /> 高级查询
             </a-button>
+            <a-divider type="vertical" style="margin: 0 4px;" />
+            <a-button type="primary" @click="openAdd">
+              <PlusOutlined /> 添加
+            </a-button>
+            <a-button @click="openBatch">
+              <UploadOutlined /> 批量添加
+            </a-button>
           </a-space>
         </a-form-item>
       </a-form>
@@ -87,6 +94,12 @@
         :record="modal.record"
         @saved="handleSaved"
       />
+
+      <!-- ========== 批量添加弹窗 ========== -->
+      <BatchAddModal
+        v-model:open="batch.open"
+        @saved="handleSaved"
+      />
   
       <!-- ========== 高级查询弹窗 ========== -->
       <AdvancedFilterModal
@@ -104,11 +117,12 @@
   import { message } from 'ant-design-vue'
   import {
     SearchOutlined, ReloadOutlined, FilterOutlined,
-    EyeOutlined, EditOutlined
+    EyeOutlined, EditOutlined, PlusOutlined, UploadOutlined
   } from '@ant-design/icons-vue'
   import { fetchGraduateList, fetchFilterOptions } from '@/api/graduate'
   import GraduateDetailModal from '@/components/GraduateDetailModal.vue'
   import AdvancedFilterModal from '@/components/AdvancedFilterModal.vue'
+  import BatchAddModal from '@/components/BatchAddModal.vue'
   
   // ====== 顶部简易筛选 ======
   const filters = reactive({
@@ -121,7 +135,16 @@
   // ====== 弹窗状态 ======
   const modal = reactive({ open: false, mode: 'view', record: {} })
   const advanced = reactive({ open: false, form: {} })
-  
+  const batch = reactive({ open: false })
+
+  const openAdd = () => {
+    modal.mode = 'add'
+    modal.record = {}
+    modal.open = true
+  }
+  const openBatch = () => {
+    batch.open = true
+  }
   const openView = (record) => {
     modal.mode = 'view'
     modal.record = record

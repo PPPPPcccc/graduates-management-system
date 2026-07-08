@@ -2,7 +2,7 @@
 <template>
     <a-modal
       :open="open"
-      :title="mode === 'edit' ? '编辑毕业生信息' : '查看毕业生信息'"
+      :title="mode === 'add' ? '添加毕业生信息' : mode === 'edit' ? '编辑毕业生信息' : '查看毕业生信息'"
       width="800px"
       :footer="null"
       :mask-closable="false"
@@ -17,54 +17,94 @@
         layout="horizontal"
       >
         <a-row :gutter="16">
-          <a-col :span="12"><a-form-item label="姓名">
-            <a-input v-model:value="form.name" />
+          <a-col :span="12"><a-form-item label="姓名" name="name">
+            <a-input v-model:value="form.name" placeholder="请输入姓名" />
           </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="身份证号">
-            <a-input v-model:value="form.idCard" />
+          <a-col :span="12"><a-form-item label="身份证号" name="idCard">
+            <a-input v-model:value="form.idCard" placeholder="请输入身份证号" />
           </a-form-item></a-col>
-  
-          <a-col :span="12"><a-form-item label="学历">
-            <a-select v-model:value="form.education" :options="EDU" />
+
+          <a-col :span="12"><a-form-item label="学历" name="education">
+            <a-select v-model:value="form.education" :options="EDU" placeholder="请选择学历" />
           </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="毕业院校">
-            <a-input v-model:value="form.school" />
+          <a-col :span="12"><a-form-item label="毕业院校" name="school">
+            <a-input v-model:value="form.school" placeholder="请输入毕业院校" />
           </a-form-item></a-col>
-  
-          <a-col :span="12"><a-form-item label="毕业日期">
+
+          <a-col :span="12"><a-form-item label="毕业日期" name="graduationDate">
             <a-input v-model:value="form.graduationDate" placeholder="如:2026年6月" />
           </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="专业">
-            <a-input v-model:value="form.major" />
+          <a-col :span="12"><a-form-item label="专业" name="major">
+            <a-input v-model:value="form.major" placeholder="请输入专业" />
           </a-form-item></a-col>
-  
-          <a-col :span="12"><a-form-item label="联系电话">
-            <a-input v-model:value="form.phone" />
+
+          <a-col :span="12"><a-form-item label="联系电话" name="phone">
+            <a-input v-model:value="form.phone" placeholder="请输入联系电话" />
           </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="调查人">
-            <a-input v-model:value="form.investigator" />
+          <a-col :span="12"><a-form-item label="调查人" name="investigator">
+            <a-input v-model:value="form.investigator" placeholder="请输入调查人" />
           </a-form-item></a-col>
-  
-          <a-col :span="24"><a-form-item label="户籍地址">
+
+          <a-col :span="24"><a-form-item label="户籍地址" name="householdAddress">
             <a-input v-model:value="form.householdAddress" />
           </a-form-item></a-col>
-          <a-col :span="24"><a-form-item label="常住详细地址">
+          <a-col :span="24"><a-form-item label="常住详细地址" name="residenceAddress">
             <a-input v-model:value="form.residenceAddress" />
           </a-form-item></a-col>
-  
-          <a-col :span="12"><a-form-item label="调查日期">
+
+          <a-col :span="12"><a-form-item label="调查日期" name="investigationDate">
             <a-input v-model:value="form.investigationDate" placeholder="如:4月16日" />
           </a-form-item></a-col>
-          <a-col :span="12"><a-form-item label="调查方式">
-            <a-select v-model:value="form.investigationMethod" :options="METHOD" />
+          <a-col :span="12"><a-form-item label="调查方式" name="investigationMethod">
+            <a-select v-model:value="form.investigationMethod" :options="METHOD" placeholder="请选择" />
           </a-form-item></a-col>
-  
+
+          <a-col :span="12"><a-form-item label="就业地" name="employmentLocation">
+            <a-input v-model:value="form.employmentLocation" />
+          </a-form-item></a-col>
+          <a-col :span="12"><a-form-item label="单位名称" name="unitName">
+            <a-input v-model:value="form.unitName" />
+          </a-form-item></a-col>
+
+          <a-col :span="12"><a-form-item label="单位性质" name="unitNature">
+            <a-select v-model:value="form.unitNature" :options="UNIT_NATURE" placeholder="请选择" />
+          </a-form-item></a-col>
+          <a-col :span="12"><a-form-item label="专业是否对口" name="majorMatched">
+            <a-select v-model:value="form.majorMatched" :options="YES_NO" placeholder="请选择" />
+          </a-form-item></a-col>
+
+          <a-col :span="24"><a-form-item label="未就业原因" name="unemployedReason">
+            <a-select v-model:value="form.unemployedReason" :options="UNEMPLOYED_REASON" placeholder="请选择" allow-clear />
+          </a-form-item></a-col>
+
+          <a-col :span="12"><a-form-item label="有无就业意愿" name="employmentWillingness">
+            <a-select v-model:value="form.employmentWillingness" :options="YES_NO" placeholder="请选择" />
+          </a-form-item></a-col>
+          <a-col :span="12"><a-form-item label='是否提供"1151"服务' name="provide1151Service">
+            <a-select v-model:value="form.provide1151Service" :options="YES_NO" placeholder="请选择" />
+          </a-form-item></a-col>
+
+          <a-col :span="24"><a-form-item label="就业服务需求" name="employmentServiceNeeds">
+            <a-select v-model:value="form.employmentServiceNeeds" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
+          </a-form-item></a-col>
+
+          <a-col :span="12"><a-form-item label="服务时间" name="serviceTime">
+            <a-input v-model:value="form.serviceTime" />
+          </a-form-item></a-col>
+          <a-col :span="12"><a-form-item label="已接受就业服务" name="receivedServices">
+            <a-select v-model:value="form.receivedServices" :options="SERVICE_NEEDS" mode="multiple" placeholder="可多选" allow-clear />
+          </a-form-item></a-col>
+
+          <a-col :span="24"><a-form-item label="推荐单位及岗位" name="recommendUnitPosition">
+            <a-input v-model:value="form.recommendUnitPosition" />
+          </a-form-item></a-col>
+
           <!-- ========== 三联就业下拉 ========== -->
-          <a-col :span="8"><a-form-item label="就业情况(一级)">
+          <a-col :span="8"><a-form-item label="就业情况(一级)" name="employmentStatus">
             <a-select v-model:value="form.employmentStatus" :options="EMP_STATUS"
               placeholder="请选择" @change="onStatusChange" />
           </a-form-item></a-col>
-          <a-col :span="8"><a-form-item label="就业情况(二级)">
+          <a-col :span="8"><a-form-item label="就业情况(二级)" name="employmentType">
             <a-select v-model:value="form.employmentType" :options="empTypeOptions"
               placeholder="请先选择一级" :disabled="!form.employmentStatus || form.employmentStatus !== '已就业'"
               @change="onTypeChange" />
@@ -73,10 +113,14 @@
             <a-select v-model:value="thirdLevel.value" :options="thirdLevel.options"
               placeholder="请先选择二级" :disabled="!thirdLevel.enabled" />
           </a-form-item></a-col>
+
+          <a-col :span="24"><a-form-item label="备注" name="remarks">
+            <a-textarea v-model:value="form.remarks" :rows="2" />
+          </a-form-item></a-col>
         </a-row>
-  
-        <!-- 编辑模式才有保存按钮 -->
-        <div v-if="mode === 'edit'" style="text-align: right; margin-top: 16px;">
+
+        <!-- 添加/编辑模式才有保存按钮 -->
+        <div v-if="mode === 'add' || mode === 'edit'" style="text-align: right; margin-top: 16px;">
           <a-space>
             <a-button @click="handleClose">取消</a-button>
             <a-button type="primary" :loading="saving" @click="handleSave">保存</a-button>
@@ -85,22 +129,22 @@
       </a-form>
     </a-modal>
   </template>
-  
+
   <script setup>
   import { reactive, ref, watch } from 'vue'
   import { message } from 'ant-design-vue'
-  import { updateGraduate } from '@/api/graduate'
-  
+  import { updateGraduate, addGraduate } from '@/api/graduate'
+
   const props = defineProps({
     open: Boolean,
-    mode: { type: String, default: 'view' },  // view / edit
+    mode: { type: String, default: 'view' },
     record: { type: Object, default: () => ({}) }
   })
   const emit = defineEmits(['update:open', 'saved'])
-  
+
   const form = reactive({})
   const saving = ref(false)
-  
+
   // 下拉字典
   const EDU = [
     { value: '专科生毕业', label: '专科生毕业' },
@@ -122,11 +166,40 @@
     { value: '特殊就业', label: '特殊就业' },
     { value: '其他情况', label: '其他情况' }
   ]
-  
-  // 三联下拉的级联
+  const UNIT_NATURE = [
+    { value: '机关', label: '机关' },
+    { value: '事业单位', label: '事业单位' },
+    { value: '国有企业', label: '国有企业' },
+    { value: '民营企业', label: '民营企业' },
+    { value: '三资企业', label: '三资企业' },
+    { value: '其他', label: '其他' }
+  ]
+  const YES_NO = [
+    { value: '是', label: '是' },
+    { value: '否', label: '否' }
+  ]
+  const UNEMPLOYED_REASON = [
+    { value: '正在择业中', label: '正在择业中' },
+    { value: '暂无合适岗位', label: '暂无合适岗位' },
+    { value: '薪酬期望过高', label: '薪酬期望过高' },
+    { value: '技能不足', label: '技能不足' },
+    { value: '家庭原因', label: '家庭原因' },
+    { value: '准备升学/考公', label: '准备升学/考公' },
+    { value: '身体原因', label: '身体原因' },
+    { value: '其他', label: '其他' }
+  ]
+  const SERVICE_NEEDS = [
+    { value: '职业指导', label: '职业指导' },
+    { value: '岗位推荐', label: '岗位推荐' },
+    { value: '技能培训', label: '技能培训' },
+    { value: '政策咨询', label: '政策咨询' },
+    { value: '创业扶持', label: '创业扶持' },
+    { value: '心理辅导', label: '心理辅导' }
+  ]
+
   const empTypeOptions = ref([])
   const thirdLevel = reactive({ enabled: false, value: undefined, options: [] })
-  
+
   const onStatusChange = (val) => {
     form.employmentType = undefined
     thirdLevel.value = undefined
@@ -167,15 +240,12 @@
       thirdLevel.options = []
     }
   }
-  
-  // 初始化表单(打开弹窗时填充 record)
+
   watch(() => props.open, (v) => {
     if (v) {
       Object.assign(form, JSON.parse(JSON.stringify(props.record || {})))
-      // 回填三级级联
       if (form.employmentStatus) onStatusChange(form.employmentStatus)
       if (form.employmentType) {
-        // 回填 thirdLevel
         const map = {
           '其他就业': 'otherEmployment',
           '特殊就业': 'specialEmployment',
@@ -187,21 +257,31 @@
           thirdLevel.value = form[field]
         }
       }
+    } else {
+      Object.keys(form).forEach(k => delete form[k])
+      empTypeOptions.value = []
+      thirdLevel.enabled = false
+      thirdLevel.value = undefined
+      thirdLevel.options = []
     }
   })
-  
+
   const handleClose = () => emit('update:open', false)
   const handleSave = async () => {
     saving.value = true
     try {
-      // 把 thirdLevel 写回对应字段
       if (form.employmentType === '其他就业') form.otherEmployment = thirdLevel.value
       if (form.employmentType === '特殊就业') form.specialEmployment = thirdLevel.value
       if (form.employmentType === '其他情况') form.otherSituation = thirdLevel.value
-  
-      const res = await updateGraduate(form.id, form)
+
+      let res
+      if (props.mode === 'add') {
+        res = await addGraduate(form)
+      } else {
+        res = await updateGraduate(form.id, form)
+      }
       if (res.data.success) {
-        message.success('保存成功')
+        message.success(props.mode === 'add' ? '添加成功' : '保存成功')
         emit('saved')
         handleClose()
       } else {

@@ -38,6 +38,8 @@ public interface GraduateMapper extends BaseMapper<Graduate> {
     @Select("SELECT DISTINCT investigation_method AS value FROM graduate WHERE is_deleted=0 AND investigation_method IS NOT NULL ORDER BY investigation_method")
     List<String> selectDistinctInvestigationMethod();
 
+    int insertGraduate(Graduate g);
+
     /**
      * 分页 + 多条件筛选(MyBatis-Plus 动态 SQL)
      */

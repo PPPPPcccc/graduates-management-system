@@ -285,6 +285,10 @@ public class GraduateServiceImpl implements GraduateService {
 
     @Override
     public boolean delete(Long id) {
+        int gid = id.intValue();
+        graduateAuxMapper.deleteServiceDemands(gid);
+        graduateAuxMapper.deleteAcceptedServices(gid);
+        graduateAuxMapper.deleteServiceTimes(gid);
         return graduateMapper.deleteById(id) > 0;
     }
 

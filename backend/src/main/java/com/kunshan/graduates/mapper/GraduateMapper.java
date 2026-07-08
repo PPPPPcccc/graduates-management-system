@@ -16,29 +16,27 @@ public interface GraduateMapper extends BaseMapper<Graduate> {
     /**
      * 下拉字典:学历(去重)
      */
-    @Select("SELECT DISTINCT education AS value FROM graduate WHERE is_deleted=0 AND education IS NOT NULL ORDER BY education")
+    @Select("SELECT DISTINCT education AS value FROM graduate WHERE education IS NOT NULL ORDER BY education")
     List<String> selectDistinctEducation();
 
-    /**
-     * 下拉字典:毕业日期(按中文拼音首字母排序需在 service 层做,这里直接 ORDER BY)
-     * 毕业日期是 "XXXX年XX月" 格式,中文按字符序,简单的按字符串升序即可
-     */
-    @Select("SELECT DISTINCT graduation_date AS value FROM graduate WHERE is_deleted=0 AND graduation_date IS NOT NULL ORDER BY graduation_date")
+    @Select("SELECT DISTINCT graduation_date AS value FROM graduate WHERE graduation_date IS NOT NULL ORDER BY graduation_date")
     List<String> selectDistinctGraduationDate();
 
-    @Select("SELECT DISTINCT investigator AS value FROM graduate WHERE is_deleted=0 AND investigator IS NOT NULL ORDER BY investigator")
+    @Select("SELECT DISTINCT investigator AS value FROM graduate WHERE investigator IS NOT NULL ORDER BY investigator")
     List<String> selectDistinctInvestigator();
 
-    @Select("SELECT DISTINCT school AS value FROM graduate WHERE is_deleted=0 AND school IS NOT NULL ORDER BY school")
+    @Select("SELECT DISTINCT school AS value FROM graduate WHERE school IS NOT NULL ORDER BY school")
     List<String> selectDistinctSchool();
 
-    @Select("SELECT DISTINCT investigation_date AS value FROM graduate WHERE is_deleted=0 AND investigation_date IS NOT NULL ORDER BY investigation_date")
+    @Select("SELECT DISTINCT investigation_date AS value FROM graduate WHERE investigation_date IS NOT NULL ORDER BY investigation_date")
     List<String> selectDistinctInvestigationDate();
 
-    @Select("SELECT DISTINCT investigation_method AS value FROM graduate WHERE is_deleted=0 AND investigation_method IS NOT NULL ORDER BY investigation_method")
+    @Select("SELECT DISTINCT investigation_method AS value FROM graduate WHERE investigation_method IS NOT NULL ORDER BY investigation_method")
     List<String> selectDistinctInvestigationMethod();
 
     int insertGraduate(Graduate g);
+
+    int deleteById(Long id);
 
     /**
      * 分页 + 多条件筛选(MyBatis-Plus 动态 SQL)

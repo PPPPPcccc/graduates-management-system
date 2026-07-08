@@ -190,4 +190,9 @@ public class GraduateServiceImpl implements GraduateService {
         String s = o.toString().trim();
         return s.isEmpty() ? null : s;
     }
+
+    @Override
+    public boolean delete(Long id) {
+        return graduateMapper.deleteById(id) > 0;
+    }
 }

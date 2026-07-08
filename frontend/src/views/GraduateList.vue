@@ -78,6 +78,9 @@
                 <a-button type="link" size="small" @click="openEdit(record)">
                   <EditOutlined /> 编辑
                 </a-button>
+                <a-button type="link" size="small" danger @click="handleDelete(record)">
+                  <DeleteOutlined /> 删除
+                </a-button>
               </a-space>
             </template>
             <template v-else-if="column.key === 'idCard'">
@@ -114,12 +117,12 @@
   
   <script setup>
   import { ref, reactive, onMounted, computed } from 'vue'
-  import { message } from 'ant-design-vue'
+  import { message, Modal } from 'ant-design-vue'
   import {
     SearchOutlined, ReloadOutlined, FilterOutlined,
-    EyeOutlined, EditOutlined, PlusOutlined, UploadOutlined
+    EyeOutlined, EditOutlined, PlusOutlined, UploadOutlined, DeleteOutlined
   } from '@ant-design/icons-vue'
-  import { fetchGraduateList, fetchFilterOptions } from '@/api/graduate'
+  import { fetchGraduateList, fetchFilterOptions, deleteGraduate } from '@/api/graduate'
   import GraduateDetailModal from '@/components/GraduateDetailModal.vue'
   import AdvancedFilterModal from '@/components/AdvancedFilterModal.vue'
   import BatchAddModal from '@/components/BatchAddModal.vue'
@@ -267,6 +270,29 @@
   const maskIdCard = (s) => {
     if (!s || s.length < 18) return s
     return s.slice(0, 6) + '*'.repeat(8) + s.slice(14)
+  }
+
+  const handleDelete = (record) => {
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除 "${record.name}" 的信息吗？此操作不可恢复。`,
+      okText: '确认删除',
+      okType: 'danger',
+      cancelText: '取消',
+      async onOk() {
+        try {
+          const res = await deleteGraduate(record.id)
+          if (res.data.success) {
+            message.success('删除成功')
+            loadData()
+          } else {
+            message.error(res.data.message || '删除失败')
+          }
+        } catch (e) {
+          message.error('删除失败')
+        }
+      }
+    })
   }
   
   onMounted(() => {

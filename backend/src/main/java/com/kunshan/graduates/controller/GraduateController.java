@@ -86,4 +86,13 @@ public class GraduateController {
         out.put("data", result);
         return out;
     }
+
+    @DeleteMapping("/{id}")
+    public Map<String, Object> delete(@PathVariable Long id) {
+        Map<String, Object> out = new HashMap<>();
+        boolean ok = graduateService.delete(id);
+        out.put("success", ok);
+        out.put("message", ok ? "删除成功" : "删除失败");
+        return out;
+    }
 }

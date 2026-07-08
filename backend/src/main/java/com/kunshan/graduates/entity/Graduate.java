@@ -43,7 +43,6 @@ public class Graduate {
     private String provide1151Service;
     private String recommendUnitPosition;
     private String remarks;
-    private Integer isDeleted;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime updatedAt;

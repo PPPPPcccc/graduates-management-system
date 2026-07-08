@@ -31,7 +31,6 @@
         <result property="provide1151Service" column="provide_1151_service"/>
         <result property="recommendUnitPosition" column="recommend_unit_position"/>
         <result property="remarks" column="remarks"/>
-        <result property="isDeleted" column="is_deleted"/>
         <result property="createdAt" column="created_at"/>
         <result property="createdBy" column="created_by"/>
         <result property="updatedAt" column="updated_at"/>
@@ -46,21 +45,20 @@
             investigation_method, employment_status, employment_type, employment_location,
             unit_name, unit_nature, major_matched, other_employment, special_employment,
             other_situation, unemployed_reason, employment_willingness, provide_1151_service,
-            recommend_unit_position, remarks, is_deleted, created_at, created_by
+            recommend_unit_position, remarks, created_at, created_by
         ) VALUES (
             #{idCard}, #{name}, #{education}, #{school}, #{graduationDate}, #{major}, #{phone},
             #{householdAddress}, #{residenceAddress}, #{investigator}, #{investigationDate},
             #{investigationMethod}, #{employmentStatus}, #{employmentType}, #{employmentLocation},
             #{unitName}, #{unitNature}, #{majorMatched}, #{otherEmployment}, #{specialEmployment},
             #{otherSituation}, #{unemployedReason}, #{employmentWillingness}, #{provide1151Service},
-            #{recommendUnitPosition}, #{remarks}, 0, datetime('now'), #{createdBy}
+            #{recommendUnitPosition}, #{remarks}, datetime('now'), #{createdBy}
         )
     </insert>
 
     <select id="selectGraduatePage" resultMap="graduateMap">
         SELECT * FROM graduate
         <where>
-            is_deleted = 0
             <if test="name != null and name != ''">
                 AND name LIKE '%' || #{name} || '%'
             </if>
@@ -112,4 +110,8 @@
         </where>
         ORDER BY id DESC
     </select>
+
+    <delete id="deleteById">
+        DELETE FROM graduate WHERE id = #{id}
+    </delete>
 </mapper>

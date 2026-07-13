@@ -74,10 +74,9 @@
               <a-select v-model:value="form.employmentStatus" :options="EMP_STATUS"
                 placeholder="请选择" @change="onStatusChange" />
             </a-form-item></a-col>
-            <a-col :span="12"><a-form-item label="就业类型" name="employmentType">
+            <a-col :span="12" v-if="form.employmentStatus === '已就业'"><a-form-item label="就业类型" name="employmentType">
               <a-select v-model:value="form.employmentType" :options="empTypeOptions"
-                placeholder="请先选择就业情况" :disabled="!form.employmentStatus || form.employmentStatus === '未就业'"
-                @change="onTypeChange" />
+                placeholder="请先选择就业情况" @change="onTypeChange" />
             </a-form-item></a-col>
           </a-row>
 
@@ -258,7 +257,9 @@
 
   const onStatusChange = (val) => {
     form.employmentType = undefined
-    if (val !== '已就业') {
+    if (val === '已就业') {
+      empTypeOptions.value = EMP_TYPE
+    } else {
       empTypeOptions.value = []
     }
   }

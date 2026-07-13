@@ -340,6 +340,49 @@ public class GraduateServiceImpl implements GraduateService {
     }
 
     @Override
+    public Map<String, Object> getStatistics() {
+        Map<String, Object> out = new HashMap<>();
+        long total = graduateMapper.countTotal();
+        out.put("total", total);
+
+        if (total == 0) {
+            out.put("employmentStatus", Collections.emptyList());
+            out.put("education", Collections.emptyList());
+            out.put("employmentType", Collections.emptyList());
+            out.put("majorMatched", Collections.emptyList());
+            out.put("employmentWillingness", Collections.emptyList());
+            out.put("educationEmployment", Collections.emptyList());
+            out.put("investigationMethod", Collections.emptyList());
+            out.put("provide1151Service", Collections.emptyList());
+            out.put("serviceDemand", Collections.emptyList());
+            out.put("acceptedService", Collections.emptyList());
+            out.put("serviceTimeMonth", Collections.emptyList());
+            out.put("employmentRate", 0.0);
+            return out;
+        }
+
+        out.put("employmentStatus",     graduateMapper.countByEmploymentStatus());
+        out.put("education",            graduateMapper.countByEducation());
+        out.put("employmentType",       graduateMapper.countByEmploymentType());
+        out.put("majorMatched",         graduateMapper.countByMajorMatched());
+        out.put("employmentWillingness", graduateMapper.countByEmploymentWillingness());
+        out.put("educationEmployment",  graduateMapper.countByEducationAndEmployment());
+        out.put("investigationMethod",  graduateMapper.countByInvestigationMethod());
+        out.put("provide1151Service",  graduateMapper.countByProvide1151Service());
+        out.put("serviceDemand",        graduateAuxMapper.countByServiceDemand());
+        out.put("acceptedService",      graduateAuxMapper.countByAcceptedService());
+        out.put("serviceTimeMonth",     graduateAuxMapper.countByServiceTimeMonth());
+
+        // 计算就业率
+        long employed = graduateMapper.countByEmploymentStatus().stream()
+                .filter(m -> "已就业".equals(m.get("label")))
+                .findFirst().map(m -> ((Number) m.get("value")).longValue()).orElse(0L);
+        out.put("employmentRate", Math.round(employed * 100.0 / total * 10) / 10.0);
+
+        return out;
+    }
+
+    @Override
     public boolean delete(Long id) {
         int gid = id.intValue();
         graduateAuxMapper.deleteServiceDemands(gid);

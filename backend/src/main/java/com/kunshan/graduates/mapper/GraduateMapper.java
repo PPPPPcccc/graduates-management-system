@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface GraduateMapper extends BaseMapper<Graduate> {
@@ -33,6 +34,42 @@ public interface GraduateMapper extends BaseMapper<Graduate> {
 
     @Select("SELECT DISTINCT investigation_method AS value FROM graduate WHERE investigation_method IS NOT NULL ORDER BY investigation_method")
     List<String> selectDistinctInvestigationMethod();
+
+    /** 统计：总人数 */
+    @Select("SELECT COUNT(*) FROM graduate")
+    long countTotal();
+
+    /** 统计：就业情况分布 */
+    @Select("SELECT COALESCE(employment_status, '未知') AS label, COUNT(*) AS value FROM graduate GROUP BY employment_status")
+    List<Map<String, Object>> countByEmploymentStatus();
+
+    /** 统计：学历分布 */
+    @Select("SELECT COALESCE(education, '未知') AS label, COUNT(*) AS value FROM graduate GROUP BY education ORDER BY value DESC")
+    List<Map<String, Object>> countByEducation();
+
+    /** 统计：就业类型分布（仅已就业） */
+    @Select("SELECT COALESCE(employment_type, '未知') AS label, COUNT(*) AS value FROM graduate WHERE employment_status = '已就业' GROUP BY employment_type")
+    List<Map<String, Object>> countByEmploymentType();
+
+    /** 统计：专业是否对口（仅单位就业） */
+    @Select("SELECT COALESCE(major_matched, '未知') AS label, COUNT(*) AS value FROM graduate WHERE employment_status = '已就业' AND employment_type = '单位就业' GROUP BY major_matched")
+    List<Map<String, Object>> countByMajorMatched();
+
+    /** 统计：就业意愿分布（仅未就业） */
+    @Select("SELECT COALESCE(employment_willingness, '未知') AS label, COUNT(*) AS value FROM graduate WHERE employment_status = '未就业' GROUP BY employment_willingness")
+    List<Map<String, Object>> countByEmploymentWillingness();
+
+    /** 统计：学历 × 就业情况 */
+    @Select("SELECT COALESCE(education, '未知') AS edu, COALESCE(employment_status, '未知') AS emp, COUNT(*) AS count FROM graduate GROUP BY education, employment_status")
+    List<Map<String, Object>> countByEducationAndEmployment();
+
+    /** 统计：调查方式分布 */
+    @Select("SELECT COALESCE(investigation_method, '未知') AS label, COUNT(*) AS value FROM graduate GROUP BY investigation_method")
+    List<Map<String, Object>> countByInvestigationMethod();
+
+    /** 统计：是否提供1151服务（仅未就业） */
+    @Select("SELECT COALESCE(provide_1151_service, '未知') AS label, COUNT(*) AS value FROM graduate WHERE employment_status = '未就业' GROUP BY provide_1151_service")
+    List<Map<String, Object>> countByProvide1151Service();
 
     int insertGraduate(Graduate g);
 

@@ -67,7 +67,7 @@
   import { message, Modal } from 'ant-design-vue'
   import {
     TeamOutlined, UserOutlined, CaretDownOutlined,
-    LogoutOutlined, HomeOutlined
+    LogoutOutlined, HomeOutlined, BarChartOutlined
   } from '@ant-design/icons-vue'
   import { logout } from '@/api/auth'
   
@@ -80,8 +80,9 @@
   
   // 根据角色过滤菜单
   const allMenus = [
-    { path: '/app/graduate', title: '高校毕业生信息管理', icon: TeamOutlined, adminOnly: false },
-    { path: '/app/account',   title: '账号管理',           icon: UserOutlined,  adminOnly: true  }
+    { path: '/app/graduate',   title: '高校毕业生信息管理', icon: TeamOutlined,    adminOnly: false },
+    { path: '/app/statistics', title: '数据分析',           icon: BarChartOutlined, adminOnly: false },
+    { path: '/app/account',    title: '账号管理',           icon: UserOutlined,    adminOnly: true  }
   ]
   const menus = computed(() => allMenus.filter(m => !m.adminOnly || role.value === 'admin'))
   

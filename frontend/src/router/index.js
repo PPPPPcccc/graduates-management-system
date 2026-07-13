@@ -19,6 +19,12 @@ const router = createRouter({
           component: () => import('@/views/GraduateList.vue'),
           meta: { title: '高校毕业生信息管理', icon: 'TeamOutlined' }
         },
+        {
+          path: 'statistics',
+          name: 'statistics',
+          component: () => import('@/views/Statistics.vue'),
+          meta: { title: '数据分析', icon: 'BarChartOutlined' }
+        },
         // 仅管理员
         {
           path: 'account',

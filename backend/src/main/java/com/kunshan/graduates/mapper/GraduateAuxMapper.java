@@ -2,10 +2,13 @@
 // 用于批量写入时同步维护 graduate 的关联附表
 package com.kunshan.graduates.mapper;
 
+import java.util.List;
+import java.util.Map;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface GraduateAuxMapper {
@@ -44,4 +47,23 @@ public interface GraduateAuxMapper {
 
     @Delete("DELETE FROM service_time WHERE graduate_id = #{graduateId}")
     int deleteServiceTimes(@Param("graduateId") Integer graduateId);
+
+    /** 统计就业服务需求（按 demand 分组计数） */
+    @Select("SELECT demand AS label, COUNT(*) AS value FROM employment_service_demand GROUP BY demand ORDER BY value DESC")
+    List<Map<String, Object>> countByServiceDemand();
+
+    /** 统计已接受就业服务（按 service 分组计数） */
+    @Select("SELECT service AS label, COUNT(*) AS value FROM accepted_employment_service GROUP BY service ORDER BY value DESC")
+    List<Map<String, Object>> countByAcceptedService();
+
+    /** 统计服务时间按月分布（提取 X月XX日 的月份） */
+    @Select("""
+        SELECT SUBSTR(service_date, 1, INSTR(service_date, '月') - 1) AS label,
+               COUNT(*) AS value
+          FROM service_time
+         WHERE service_date LIKE '%月%日'
+         GROUP BY SUBSTR(service_date, 1, INSTR(service_date, '月') - 1)
+         ORDER BY CAST(label AS INTEGER)
+        """)
+    List<Map<String, Object>> countByServiceTimeMonth();
 }

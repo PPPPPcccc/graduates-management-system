@@ -40,6 +40,14 @@ public class GraduateController {
         return out;
     }
 
+    @GetMapping("/statistics")
+    public Map<String, Object> statistics() {
+        Map<String, Object> out = new HashMap<>();
+        out.put("success", true);
+        out.put("data", graduateService.getStatistics());
+        return out;
+    }
+
     @GetMapping("/{id}")
     public Map<String, Object> get(@PathVariable Long id) {
         Map<String, Object> out = new HashMap<>();

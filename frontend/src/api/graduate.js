@@ -21,3 +21,6 @@ export function deleteGraduate(id) {
 export function batchDeleteGraduates(ids) {
   return request.post('/graduate/batch-delete', ids)
 }
+export function fetchStatistics() {
+  return request.get('/graduate/statistics')
+}

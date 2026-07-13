@@ -261,6 +261,8 @@
       empTypeOptions.value = EMP_TYPE
     } else {
       empTypeOptions.value = []
+      form.employmentServiceNeeds = undefined
+      form.receivedServices = undefined
     }
   }
   const onTypeChange = (val) => {
@@ -275,6 +277,8 @@
       if (form.employmentStatus === '已就业') {
         empTypeOptions.value = EMP_TYPE
       }
+      if (!form.employmentServiceNeeds || form.employmentServiceNeeds.length === 0) form.employmentServiceNeeds = undefined
+      if (!form.receivedServices || form.receivedServices.length === 0) form.receivedServices = undefined
     } else {
       Object.keys(form).forEach(k => delete form[k])
       empTypeOptions.value = []

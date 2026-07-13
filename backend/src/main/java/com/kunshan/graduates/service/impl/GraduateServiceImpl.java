@@ -81,7 +81,7 @@ public class GraduateServiceImpl implements GraduateService {
     @Override
     public boolean update(Long id, Graduate g, String updatedBy) {
         g.setId(id.intValue());
-        deriveEmploymentFields(g);
+        normalizeEmploymentFields(g);
         boolean ok = graduateMapper.updateById(g) >= 0;
         if (ok) {
             // 先删后插，保持关联数据同步
@@ -121,13 +121,69 @@ public class GraduateServiceImpl implements GraduateService {
     }
 
     /**
-     * 根据领导填写的实际字段，自动推导 employmentStatus 和 employmentType。
-     * 规则（优先级递减）：
-     *   1. 填写了"就业地/单位名称/单位性质/专业是否对口" → 已就业 + 单位就业
-     *   2. 填写了"其他就业"                    → 已就业 + 其他就业
-     *   3. 填写了"特殊就业"                    → 已就业 + 特殊就业
-     *   4. 填写了"其他情况"                    → 已就业 + 其他情况
-     *   5. 填写了"未就业原因/有无就业意愿/是否提供1151服务/就业服务需求" → 未就业
+     * 编辑时：根据前端传来的 employmentStatus + employmentType 清空无关字段。
+     */
+    private void normalizeEmploymentFields(Graduate g) {
+        String status = g.getEmploymentStatus();
+        String type = g.getEmploymentType();
+
+        if ("未就业".equals(status)) {
+            g.setEmploymentType(null);
+            g.setEmploymentLocation(null);
+            g.setUnitName(null);
+            g.setUnitNature(null);
+            g.setMajorMatched(null);
+            g.setOtherEmployment(null);
+            g.setSpecialEmployment(null);
+            g.setOtherSituation(null);
+        } else if ("已就业".equals(status)) {
+            if ("单位就业".equals(type)) {
+                g.setOtherEmployment(null);
+                g.setSpecialEmployment(null);
+                g.setOtherSituation(null);
+                g.setUnemployedReason(null);
+                g.setEmploymentWillingness(null);
+                g.setProvide1151Service(null);
+                g.setRecommendUnitPosition(null);
+            } else if ("其他就业".equals(type)) {
+                g.setEmploymentLocation(null);
+                g.setUnitName(null);
+                g.setUnitNature(null);
+                g.setMajorMatched(null);
+                g.setSpecialEmployment(null);
+                g.setOtherSituation(null);
+                g.setUnemployedReason(null);
+                g.setEmploymentWillingness(null);
+                g.setProvide1151Service(null);
+                g.setRecommendUnitPosition(null);
+            } else if ("特殊就业".equals(type)) {
+                g.setEmploymentLocation(null);
+                g.setUnitName(null);
+                g.setUnitNature(null);
+                g.setMajorMatched(null);
+                g.setOtherEmployment(null);
+                g.setOtherSituation(null);
+                g.setUnemployedReason(null);
+                g.setEmploymentWillingness(null);
+                g.setProvide1151Service(null);
+                g.setRecommendUnitPosition(null);
+            } else if ("其他情况".equals(type)) {
+                g.setEmploymentLocation(null);
+                g.setUnitName(null);
+                g.setUnitNature(null);
+                g.setMajorMatched(null);
+                g.setOtherEmployment(null);
+                g.setSpecialEmployment(null);
+                g.setUnemployedReason(null);
+                g.setEmploymentWillingness(null);
+                g.setProvide1151Service(null);
+                g.setRecommendUnitPosition(null);
+            }
+        }
+    }
+
+    /**
+     * 批量导入时（前端无 employmentType）：根据实际填写的字段自动推导状态和类型。
      */
     private void deriveEmploymentFields(Graduate g) {
         boolean hasUnit = hasValue(g.getEmploymentLocation())
@@ -135,14 +191,14 @@ public class GraduateServiceImpl implements GraduateService {
                         || hasValue(g.getUnitNature())
                         || hasValue(g.getMajorMatched());
 
-        boolean hasOtherEmp    = hasValue(g.getOtherEmployment());
-        boolean hasSpecialEmp  = hasValue(g.getSpecialEmployment());
-        boolean hasOtherSit    = hasValue(g.getOtherSituation());
+        boolean hasOtherEmp   = hasValue(g.getOtherEmployment());
+        boolean hasSpecialEmp = hasValue(g.getSpecialEmployment());
+        boolean hasOtherSit   = hasValue(g.getOtherSituation());
 
-        boolean hasUnemployed  = hasValue(g.getUnemployedReason())
-                               || hasValue(g.getEmploymentWillingness())
-                               || hasValue(g.getProvide1151Service())
-                               || hasValue(g.getRecommendUnitPosition());
+        boolean hasUnemployed = hasValue(g.getUnemployedReason())
+                              || hasValue(g.getEmploymentWillingness())
+                              || hasValue(g.getProvide1151Service())
+                              || hasValue(g.getRecommendUnitPosition());
 
         if (hasUnit) {
             g.setEmploymentStatus("已就业");

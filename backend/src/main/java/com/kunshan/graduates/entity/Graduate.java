@@ -1,5 +1,6 @@
 package com.kunshan.graduates.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -32,18 +33,29 @@ public class Graduate {
     private String investigationDate;
     private String investigationMethod;
     private String employmentStatus;
+    @TableField(value = "employment_type", updateStrategy = FieldStrategy.IGNORED)
     private String employmentType;
+    @TableField(value = "employment_location", updateStrategy = FieldStrategy.IGNORED)
     private String employmentLocation;
+    @TableField(value = "unit_name", updateStrategy = FieldStrategy.IGNORED)
     private String unitName;
+    @TableField(value = "unit_nature", updateStrategy = FieldStrategy.IGNORED)
     private String unitNature;
+    @TableField(value = "major_matched", updateStrategy = FieldStrategy.IGNORED)
     private String majorMatched;
+    @TableField(value = "other_employment", updateStrategy = FieldStrategy.IGNORED)
     private String otherEmployment;
+    @TableField(value = "special_employment", updateStrategy = FieldStrategy.IGNORED)
     private String specialEmployment;
+    @TableField(value = "other_situation", updateStrategy = FieldStrategy.IGNORED)
     private String otherSituation;
+    @TableField(value = "unemployed_reason", updateStrategy = FieldStrategy.IGNORED)
     private String unemployedReason;
+    @TableField(value = "employment_willingness", updateStrategy = FieldStrategy.IGNORED)
     private String employmentWillingness;
-    @TableField("provide_1151_service")
+    @TableField(value = "provide_1151_service", updateStrategy = FieldStrategy.IGNORED)
     private String provide1151Service;
+    @TableField(value = "recommend_unit_position", updateStrategy = FieldStrategy.IGNORED)
     private String recommendUnitPosition;
     private String remarks;
     private LocalDateTime createdAt;

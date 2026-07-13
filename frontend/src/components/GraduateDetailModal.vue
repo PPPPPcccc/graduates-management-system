@@ -132,7 +132,7 @@
                 <a-input v-model:value="form.unemployedReason" placeholder="请输入未就业原因" />
               </a-form-item></a-col>
               <a-col :span="12"><a-form-item label="有无就业意愿" name="employmentWillingness">
-                <a-select v-model:value="form.employmentWillingness" :options="YES_NO" placeholder="请选择" />
+                <a-select v-model:value="form.employmentWillingness" :options="HAVE_NONE" placeholder="请选择" />
               </a-form-item></a-col>
               <a-col :span="12"><a-form-item label='是否提供"1151"服务' name="provide1151Service">
                 <a-select v-model:value="form.provide1151Service" :options="YES_NO" placeholder="请选择" />
@@ -211,6 +211,10 @@
   const YES_NO = [
     { value: '是', label: '是' },
     { value: '否', label: '否' }
+  ]
+  const HAVE_NONE = [
+    { value: '有', label: '有' },
+    { value: '无', label: '无' }
   ]
 
   const OTHER_EMPLOYMENT = [
@@ -300,8 +304,10 @@
         emit('saved')
         handleClose()
       } else {
-        message.error(res.data.message)
+        message.error(res.data.message || '操作失败')
       }
+    } catch (e) {
+      message.error(e?.response?.data?.message || e?.message || '网络错误，请稍后重试')
     } finally {
       saving.value = false
     }

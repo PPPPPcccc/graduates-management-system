@@ -59,7 +59,37 @@
               <a-select v-model:value="form.investigationMethod" :options="METHOD" placeholder="请选择" />
             </a-form-item></a-col>
             <a-col :span="12"><a-form-item label="服务时间" name="serviceTime">
-              <a-input v-model:value="form.serviceTime" />
+              <div class="tag-input-wrapper">
+                <!-- 已有时间标签 -->
+                <span
+                  v-for="(t, idx) in form.serviceTime || []"
+                  :key="idx"
+                  class="time-tag"
+                >
+                  {{ t }}
+                  <span v-if="mode !== 'view'" class="time-tag-close" @click="removeServiceTime(idx)">×</span>
+                </span>
+                <!-- 添加入口（编辑/新增模式显示） -->
+                <span v-if="mode !== 'view'" class="time-add-row">
+                  <a-input-number
+                    v-model:value="addMonth"
+                    :min="1" :max="12"
+                    placeholder="月"
+                    class="time-num-input"
+                    :controls="false"
+                  />
+                  <span class="time-unit">月</span>
+                  <a-input-number
+                    v-model:value="addDay"
+                    :min="1" :max="31"
+                    placeholder="日"
+                    class="time-num-input"
+                    :controls="false"
+                  />
+                  <span class="time-unit">日</span>
+                  <a-button type="link" size="small" @click="addServiceTime">添加</a-button>
+                </span>
+              </div>
             </a-form-item></a-col>
           </a-row>
         </div>
@@ -185,6 +215,23 @@
 
   const form = reactive({})
   const saving = ref(false)
+  const addMonth = ref(null)
+  const addDay = ref(null)
+
+  const addServiceTime = () => {
+    if (addMonth.value === null || addDay.value === null) return
+    const v = `${addMonth.value}月${addDay.value}日`
+    if (!form.serviceTime) form.serviceTime = []
+    if (!form.serviceTime.includes(v)) {
+      form.serviceTime.push(v)
+    }
+    addMonth.value = null
+    addDay.value = null
+  }
+
+  const removeServiceTime = (idx) => {
+    form.serviceTime.splice(idx, 1)
+  }
 
   // 下拉字典
   const EDU = [
@@ -287,6 +334,8 @@
       Object.keys(form).forEach(k => delete form[k])
       empTypeOptions.value = []
     }
+    addMonth.value = null
+    addDay.value = null
   })
 
   const handleClose = () => emit('update:open', false)
@@ -330,5 +379,54 @@
     padding-bottom: 8px;
     border-bottom: 2px solid #1890ff;
     display: inline-block;
+  }
+  .tag-input-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-height: 38px;
+    background: #fff;
+    cursor: text;
+  }
+  .tag-input-wrapper:focus-within {
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24,144,255,0.1);
+  }
+  .time-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e6f7ff;
+    color: #1890ff;
+    border: 1px solid #91d5ff;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 13px;
+  }
+  .time-tag-close {
+    cursor: pointer;
+    font-size: 14px;
+    color: #8cc8ff;
+    line-height: 1;
+  }
+  .time-tag-close:hover {
+    color: #1890ff;
+  }
+  .time-add-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .time-num-input {
+    width: 48px;
+    text-align: center;
+  }
+  .time-unit {
+    color: #666;
+    font-size: 13px;
   }
   </style>

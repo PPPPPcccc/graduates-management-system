@@ -70,18 +70,14 @@
 
           <!-- 一级：就业状态 -->
           <a-row :gutter="16" style="margin-bottom: 16px;">
-            <a-col :span="8"><a-form-item label="就业情况" name="employmentStatus">
+            <a-col :span="12"><a-form-item label="就业情况" name="employmentStatus">
               <a-select v-model:value="form.employmentStatus" :options="EMP_STATUS"
                 placeholder="请选择" @change="onStatusChange" />
             </a-form-item></a-col>
-            <a-col :span="8"><a-form-item label="就业类型" name="employmentType">
+            <a-col :span="12"><a-form-item label="就业类型" name="employmentType">
               <a-select v-model:value="form.employmentType" :options="empTypeOptions"
                 placeholder="请先选择就业情况" :disabled="!form.employmentStatus || form.employmentStatus === '未就业'"
                 @change="onTypeChange" />
-            </a-form-item></a-col>
-            <a-col :span="8"><a-form-item label="细分">
-              <a-select v-model:value="thirdLevel.value" :options="thirdLevel.options"
-                placeholder="请先选择就业类型" :disabled="!form.employmentType || !['其他就业','特殊就业','其他情况'].includes(form.employmentType)" />
             </a-form-item></a-col>
           </a-row>
 
@@ -106,8 +102,8 @@
           <!-- 已就业-其他就业 -->
           <div v-if="form.employmentStatus === '已就业' && form.employmentType === '其他就业'">
             <a-row :gutter="16">
-              <a-col :span="24"><a-form-item label="其他就业">
-                <a-input v-model:value="thirdLevel.value" placeholder="请输入其他就业情况" />
+              <a-col :span="12"><a-form-item label="其他就业">
+                <a-select v-model:value="form.otherEmployment" :options="OTHER_EMPLOYMENT" placeholder="请选择" />
               </a-form-item></a-col>
             </a-row>
           </div>
@@ -115,8 +111,8 @@
           <!-- 已就业-特殊就业 -->
           <div v-if="form.employmentStatus === '已就业' && form.employmentType === '特殊就业'">
             <a-row :gutter="16">
-              <a-col :span="24"><a-form-item label="特殊就业">
-                <a-input v-model:value="thirdLevel.value" placeholder="请输入特殊就业情况" />
+              <a-col :span="12"><a-form-item label="特殊就业">
+                <a-select v-model:value="form.specialEmployment" :options="SPECIAL_EMPLOYMENT" placeholder="请选择" />
               </a-form-item></a-col>
             </a-row>
           </div>
@@ -124,8 +120,8 @@
           <!-- 已就业-其他情况 -->
           <div v-if="form.employmentStatus === '已就业' && form.employmentType === '其他情况'">
             <a-row :gutter="16">
-              <a-col :span="24"><a-form-item label="其他情况">
-                <a-input v-model:value="thirdLevel.value" placeholder="请输入其他情况" />
+              <a-col :span="12"><a-form-item label="其他情况">
+                <a-select v-model:value="form.otherSituation" :options="OTHER_SITUATION" placeholder="请选择" />
               </a-form-item></a-col>
             </a-row>
           </div>
@@ -218,6 +214,23 @@
     { value: '否', label: '否' }
   ]
 
+  const OTHER_EMPLOYMENT = [
+    { value: '个体经营', label: '个体经营' },
+    { value: '灵活就业', label: '灵活就业' },
+    { value: '公益岗位', label: '公益岗位' },
+    { value: '自主创业', label: '自主创业' }
+  ]
+  const SPECIAL_EMPLOYMENT = [
+    { value: '社区岗位', label: '社区岗位' },
+    { value: '基层项目', label: '基层项目' },
+    { value: '科研助理', label: '科研助理' }
+  ]
+  const OTHER_SITUATION = [
+    { value: '参军', label: '参军' },
+    { value: '出国', label: '出国' },
+    { value: '升学', label: '升学' }
+  ]
+
   const SERVICE_DEMANDS = [
     { value: '失业登记需求',     label: '失业登记需求' },
     { value: '困难认定需求',     label: '困难认定需求' },
@@ -242,47 +255,17 @@
   ]
 
   const empTypeOptions = ref([])
-  const thirdLevel = reactive({ enabled: false, value: undefined, options: [] })
 
   const onStatusChange = (val) => {
     form.employmentType = undefined
-    thirdLevel.value = undefined
-    if (val === '已就业') {
-      empTypeOptions.value = EMP_TYPE
-    } else {
+    if (val !== '已就业') {
       empTypeOptions.value = []
-      thirdLevel.enabled = false
-      thirdLevel.options = []
     }
   }
   const onTypeChange = (val) => {
-    thirdLevel.value = undefined
-    if (val === '其他就业') {
-      thirdLevel.enabled = true
-      thirdLevel.options = [
-        { value: '个体经营', label: '个体经营' },
-        { value: '灵活就业', label: '灵活就业' },
-        { value: '公益岗位', label: '公益岗位' },
-        { value: '自主创业', label: '自主创业' }
-      ]
-    } else if (val === '特殊就业') {
-      thirdLevel.enabled = true
-      thirdLevel.options = [
-        { value: '社区岗位', label: '社区岗位' },
-        { value: '基层项目', label: '基层项目' },
-        { value: '科研助理', label: '科研助理' }
-      ]
-    } else if (val === '其他情况') {
-      thirdLevel.enabled = true
-      thirdLevel.options = [
-        { value: '参军', label: '参军' },
-        { value: '出国', label: '出国' },
-        { value: '升学', label: '升学' }
-      ]
-    } else {
-      thirdLevel.enabled = false
-      thirdLevel.options = []
-    }
+    if (val !== '其他就业') form.otherEmployment = undefined
+    if (val !== '特殊就业') form.specialEmployment = undefined
+    if (val !== '其他情况') form.otherSituation = undefined
   }
 
   watch(() => props.open, (v) => {
@@ -290,25 +273,10 @@
       Object.assign(form, JSON.parse(JSON.stringify(props.record || {})))
       if (form.employmentStatus === '已就业') {
         empTypeOptions.value = EMP_TYPE
-        if (form.employmentType) {
-          const map = {
-            '其他就业': 'otherEmployment',
-            '特殊就业': 'specialEmployment',
-            '其他情况': 'otherSituation'
-          }
-          const field = map[form.employmentType]
-          if (field && form[field]) {
-            onTypeChange(form.employmentType)
-            thirdLevel.value = form[field]
-          }
-        }
       }
     } else {
       Object.keys(form).forEach(k => delete form[k])
       empTypeOptions.value = []
-      thirdLevel.enabled = false
-      thirdLevel.value = undefined
-      thirdLevel.options = []
     }
   })
 
@@ -316,10 +284,6 @@
   const handleSave = async () => {
     saving.value = true
     try {
-      if (form.employmentType === '其他就业') form.otherEmployment = thirdLevel.value
-      if (form.employmentType === '特殊就业') form.specialEmployment = thirdLevel.value
-      if (form.employmentType === '其他情况') form.otherSituation = thirdLevel.value
-
       let res
       if (props.mode === 'add') {
         res = await addGraduate(form)

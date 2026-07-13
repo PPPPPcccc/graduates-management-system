@@ -56,6 +56,13 @@
         </a-form-item>
       </a-form>
   
+      <!-- ========== 工具栏 ========== -->
+      <div class="toolbar">
+        <a-button danger @click="handleBatchDelete" :disabled="selectedCount === 0">
+          <DeleteOutlined /> 批量删除({{ selectedCount }})
+        </a-button>
+      </div>
+  
       <!-- ========== 表格 ========== -->
       <div class="table-scroll-wrapper">
         <a-table
@@ -63,6 +70,7 @@
           :data-source="dataList"
           :loading="loading"
           :pagination="pagination"
+          :row-selection="{ selectedRowKeys, onChange: handleSelectChange }"
           row-key="id"
           @change="handleTableChange"
           size="middle"
@@ -122,7 +130,7 @@
     SearchOutlined, ReloadOutlined, FilterOutlined,
     EyeOutlined, EditOutlined, PlusOutlined, UploadOutlined, DeleteOutlined
   } from '@ant-design/icons-vue'
-  import { fetchGraduateList, fetchFilterOptions, deleteGraduate } from '@/api/graduate'
+  import { fetchGraduateList, fetchFilterOptions, deleteGraduate, batchDeleteGraduates } from '@/api/graduate'
   import GraduateDetailModal from '@/components/GraduateDetailModal.vue'
   import AdvancedFilterModal from '@/components/AdvancedFilterModal.vue'
   import BatchAddModal from '@/components/BatchAddModal.vue'
@@ -261,9 +269,52 @@
     Object.keys(filters).forEach(k => filters[k] = undefined)
     handleQuery()
   }
+  // ====== 批量选择状态 ======
+  const selectedRowKeys = ref([])
+  const selectedRows = ref([])
+
+  const selectedCount = computed(() => selectedRowKeys.value.length)
+
+  const handleSelectChange = (keys, rows) => {
+    selectedRowKeys.value = keys
+    selectedRows.value = rows
+  }
+
+  const handleBatchDelete = () => {
+    if (selectedRowKeys.value.length === 0) {
+      message.warning('请先选择要删除的数据')
+      return
+    }
+    Modal.confirm({
+      title: '确认批量删除',
+      content: `确定要删除选中的 ${selectedRowKeys.value.length} 条数据吗？此操作不可恢复。`,
+      okText: '确认删除',
+      okType: 'danger',
+      cancelText: '取消',
+      async onOk() {
+        try {
+          const ids = selectedRowKeys.value
+          const res = await batchDeleteGraduates(ids)
+          if (res.data.success) {
+            message.success('批量删除成功')
+            selectedRowKeys.value = []
+            selectedRows.value = []
+            loadData()
+          } else {
+            message.error(res.data.message || '批量删除失败')
+          }
+        } catch (e) {
+          message.error('批量删除失败')
+        }
+      }
+    })
+  }
+
   const handleTableChange = (pag) => {
     pagination.current = pag.current
     pagination.pageSize = pag.pageSize
+    selectedRowKeys.value = []
+    selectedRows.value = []
     loadData()
   }
 
@@ -299,6 +350,7 @@
   <style scoped>
   .graduate-page { padding: 0; }
   .filter-bar { margin-bottom: 16px; }
+  .toolbar { margin-bottom: 12px; }
   :deep(.ant-form-item) { margin-bottom: 12px; }
   .table-scroll-wrapper { overflow-x: auto; }
   </style>

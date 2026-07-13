@@ -13,4 +13,5 @@ public interface GraduateService {
     boolean add(Graduate g, String createdBy);
     Map<String, Object> batchAdd(List<Map<String, String>> rows, String createdBy);
     boolean delete(Long id);
+    int batchDelete(List<Long> ids);
 }

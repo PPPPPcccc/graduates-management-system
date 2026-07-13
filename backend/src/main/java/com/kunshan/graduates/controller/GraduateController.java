@@ -95,4 +95,13 @@ public class GraduateController {
         out.put("message", ok ? "删除成功" : "删除失败");
         return out;
     }
+
+    @PostMapping("/batch-delete")
+    public Map<String, Object> batchDelete(@RequestBody List<Long> ids) {
+        Map<String, Object> out = new HashMap<>();
+        int count = graduateService.batchDelete(ids);
+        out.put("success", true);
+        out.put("data", count);
+        return out;
+    }
 }

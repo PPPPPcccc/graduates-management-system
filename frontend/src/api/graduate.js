@@ -18,3 +18,6 @@ export function batchAddGraduates(rows) {
 export function deleteGraduate(id) {
   return request.delete(`/graduate/${id}`)
 }
+export function batchDeleteGraduates(ids) {
+  return request.post('/graduate/batch-delete', ids)
+}

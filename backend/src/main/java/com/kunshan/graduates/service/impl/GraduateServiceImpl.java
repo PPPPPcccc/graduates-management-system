@@ -292,6 +292,15 @@ public class GraduateServiceImpl implements GraduateService {
         return graduateMapper.deleteById(id) > 0;
     }
 
+    @Override
+    public int batchDelete(List<Long> ids) {
+        int count = 0;
+        for (Long id : ids) {
+            if (delete(id)) count++;
+        }
+        return count;
+    }
+
     /**
      * 批量填充关联表数据到 graduate 列表
      */
